@@ -16,13 +16,12 @@ def gen_engine(verbose=False):
     for model_name in ['yolov5su', 'yolov10s', 'yolov8s-worldv2']:
         # check engine existence
         model_path = join(model_folder, model_name + suffix)
-        if (not exists(model_path)): 
+        if not exists(model_path): 
                 model_path = model_name + suffix
         for dtype in dtypes:
-            engine_path = join(model_folder, model_name + '_' + dtype + export_suffix)
-            engine_old_path = join(model_folder, model_name + export_suffix)
-            if (exists(engine_path)): 
-                logging.debug(f'Found existing engine {engine_path}. Skipping.')
+            engine_dest = join(model_folder, model_name + '_' + dtype + export_suffix)
+            if exists(engine_dest): 
+                logging.debug(f'Found existing engine {engine_dest}. Skipping.')
                 continue
             
             model = YOLO(model_path, verbose=False)
@@ -33,8 +32,10 @@ def gen_engine(verbose=False):
                 int8=True if dtype == 'int8' else False,
                 verbose=verbose
             )
-            shutil.move(engine_old_path, engine_path)
-            logging.debug(f"Model generated at {join(model_folder, model_name + '_fp32.engine')}")
+            engine_path = join(model_folder, model_name + export_suffix)
+            if not exists(engine_path): engine_path = model_name + export_suffix
+            shutil.move(engine_path, engine_dest)
+            logging.debug(f"Model generated at {engine_dest}")
     
     logging.info('Models generated: yolov5s, yolov10s, yolo-world.')
     logging.info(
