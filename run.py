@@ -1,14 +1,18 @@
 from util import parse_args, evaluate, get_model_path
 import logging
 from gen_engine_u import gen_engine
+from ultralytics import settings
 
     
 def main(args):
+    settings.reset()
     if args.verbose is None: 
         args.verbose = False
         
     if args.command == 'gen': 
-        gen_engine(verbose=args.verbose)
+        if not hasattr(args, 'dataset'):
+            args.dataset = 'coco128.yaml'
+        gen_engine(data=args.dataset, verbose=args.verbose)
         logging.info('Models are successfully generated.')
         return
     

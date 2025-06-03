@@ -6,7 +6,7 @@ from os import makedirs
 import logging
 
 
-def gen_engine(verbose=False):
+def gen_engine(data='coco8.yaml', verbose=False):
     model_folder = 'models'
     suffix = '.pt'
     export_suffix = '.engine'
@@ -20,22 +20,27 @@ def gen_engine(verbose=False):
                 model_path = model_name + suffix
         for dtype in dtypes:
             engine_dest = join(model_folder, model_name + '_' + dtype + export_suffix)
-            if exists(engine_dest): 
+            if dtype != 'int8' and exists(engine_dest): 
                 logging.debug(f'Found existing engine {engine_dest}. Skipping.')
                 continue
             
             model = YOLO(model_path, verbose=False)
-            logging.debug(f"Generating {dtype.upper()} model for: {model_name} ...")
+            logging.debug(f'Generating {dtype.upper()} model for: {model_name} ...')
+            if dtype == 'int8':
+                logging.debug(f'Calibration set for int8 model: {data}')
             model.export(
                 format="engine", 
-                half=True if dtype == 'fp16' else False,
-                int8=True if dtype == 'int8' else False,
-                verbose=verbose
+                half=(dtype == 'fp16'),
+                int8=(dtype == 'int8'),
+                data=data,
+                dynamic=False,
+                fraction=0.2,
+                verbose=verbose,
             )
             engine_path = join(model_folder, model_name + export_suffix)
             if not exists(engine_path): engine_path = model_name + export_suffix
             shutil.move(engine_path, engine_dest)
-            logging.debug(f"Model generated at {engine_dest}")
+            logging.debug(f'Model generated at {engine_dest}')
     
     logging.info('Models generated: yolov5s, yolov10s, yolo-world.')
     logging.info(

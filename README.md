@@ -14,6 +14,12 @@ pip install 'numpy<2'
 + Run `gen_engine_u.py` to download models and generate engine in different data types.
 + Run `eval_new.py` to run benchmarks. 
 
-> **Note:** Modify `data=` argument in `eval_u.py` to test on different datasets. It needs a very long time to download COCO2017 (with `coco.yaml`). If you just want to check if this program works, `coco8.yaml` or `coco128.yaml` is recommended.
+> **Note:** It needs a very long time to download COCO2017 (with `coco.yaml`).
 
 
+# Notes
+
+TensorRT download address:
+- [For Ubuntu 22.04](https://developer.nvidia.com/downloads/compute/machine-learning/tensorrt/secure/8.6.1/local_repos/nv-tensorrt-local-repo-ubuntu2204-8.6.1-cuda-12.0_1.0-1_amd64.deb)
+- [For Ubuntu 20.04](https://developer.nvidia.com/downloads/compute/machine-learning/tensorrt/secure/8.6.1/local_repos/nv-tensorrt-local-repo-ubuntu2004-8.6.1-cuda-12.0_1.0-1_amd64.deb)
+- [For Ubuntu 18.04](https://developer.nvidia.com/downloads/compute/machine-learning/tensorrt/secure/8.6.1/local_repos/nv-tensorrt-local-repo-ubuntu1804-8.6.1-cuda-12.0_1.0-1_amd64.deb)

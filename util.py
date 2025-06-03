@@ -29,6 +29,13 @@ def parse_args():
         add_help=False,
     )
     gen_parser.add_argument(
+        '-d', '--data', '--dataset',
+        dest='dataset',
+        type=str,
+        default='coco.yaml',
+        help='Specify the calibration dataset for int8 models.',
+    )
+    gen_parser.add_argument(
         '-v', '--verbose',
         action='store_true',
         help='Show verbose logs.'
@@ -55,12 +62,14 @@ def parse_args():
         help='Run model benchmark for all models (yolov5s, yolo-world, yolov10s).\nGet deactivated when "--model" is specified.',
     )
     eval_exclusive_group.add_argument(
-        '-m', '--model',
+        '-m', '--model', '--models',
+        dest='model',
         type=str,
-        help='Specify the model(s) for benchmark. Choose from: yolov5s, yolo-world, yolov10s.',
+        help='Specify the model(s) for benchmark. Recommend to choose from: yolov5s, yolo-world, yolov10s. Split with comma (",") if multiple models are specified.',
     )
     eval_parser.add_argument(
-        '-d', '--dataset',
+        '-d', '--data', '--dataset',
+        dest='dataset',
         type=str,
         default='coco.yaml',
         help='Specify the name of the YAML file of the dataset to evaluate on.\nOnly Ultralytics detection datasets are supported. See https://github.com/ultralytics/ultralytics/tree/main/ultralytics/cfg/datasets',
